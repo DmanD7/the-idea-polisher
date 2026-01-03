@@ -11,7 +11,7 @@ export const polishNotes = async (notes: string): Promise<string> => {
   
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-flash-latest",
+      model: "gemini-3-flash-preview",
       contents: notes,
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
@@ -65,7 +65,7 @@ export const extractCategory = async (polishedOutline: string): Promise<string> 
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-flash-latest",
+      model: "gemini-3-flash-preview",
       contents: prompt,
     });
     return response.text?.trim().replace(/[^\w]/g, '') || "General";
@@ -96,7 +96,7 @@ export const generateExpansions = async (polishedOutline: string): Promise<strin
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-flash-latest",
+      model: "gemini-3-flash-preview",
       contents: prompt,
       config: {
         systemInstruction: "You are a creative business strategist and startup mentor.",
