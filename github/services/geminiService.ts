@@ -1,4 +1,3 @@
-
 import { GoogleGenAI } from "@google/genai";
 import { SYSTEM_INSTRUCTION } from "../constants";
 
@@ -12,7 +11,7 @@ export const polishNotes = async (notes: string): Promise<string> => {
   
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-flash-latest",
       contents: notes,
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
@@ -21,7 +20,6 @@ export const polishNotes = async (notes: string): Promise<string> => {
       },
     });
 
-    // Access .text property directly as per Gemini API guidelines
     return response.text || "Failed to generate a response. Please try again.";
   } catch (error) {
     console.error("Gemini API Error:", error);
@@ -31,14 +29,13 @@ export const polishNotes = async (notes: string): Promise<string> => {
 
 /**
  * Accurately transcribe audio input using Gemini.
- * Switched to 'gemini-3-flash-preview' to resolve the 404 NOT_FOUND error.
  */
 export const transcribeAudio = async (base64Audio: string, mimeType: string = "audio/webm;codecs=opus"): Promise<string> => {
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-2.5-flash-native-audio-preview-09-2025",
       contents: {
         parts: [
           {
@@ -54,7 +51,6 @@ export const transcribeAudio = async (base64Audio: string, mimeType: string = "a
       },
     });
 
-    // Use .text property directly
     return response.text?.trim() || "";
   } catch (error) {
     console.error("Transcription Error:", error);
@@ -69,7 +65,7 @@ export const extractCategory = async (polishedOutline: string): Promise<string> 
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-flash-lite-latest",
+      model: "gemini-flash-latest",
       contents: prompt,
     });
     return response.text?.trim().replace(/[^\w]/g, '') || "General";
@@ -100,7 +96,7 @@ export const generateExpansions = async (polishedOutline: string): Promise<strin
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-flash-latest",
       contents: prompt,
       config: {
         systemInstruction: "You are a creative business strategist and startup mentor.",
